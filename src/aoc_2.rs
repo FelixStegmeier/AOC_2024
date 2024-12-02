@@ -16,7 +16,6 @@ fn parser(path: &std::path::Path) -> Vec<Vec<i32>>{
 }
 
 fn check_all_increasing_all_decreasing_by_max_3(row: Vec<i32>) -> bool{
-    let mut bad_report = false;
     let mut increasing = false;
     let mut decreasing = false;
     let mut previous: i32 = row[0];
