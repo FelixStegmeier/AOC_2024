@@ -35,11 +35,11 @@ fn check_all_increasing_all_decreasing_by_max_3(row: Vec<i32>) -> bool{
     (increasing || decreasing) && !(increasing && decreasing)
 }
 
-fn brute_force(mut row: Vec<i32>) -> bool{
+fn brute_force(row: Vec<i32>) -> bool{
     for i in 0..row.len(){
         let mut row_clone = row.clone();
         row_clone.remove(i);
-        if (check_all_increasing_all_decreasing_by_max_3(row_clone)){
+        if check_all_increasing_all_decreasing_by_max_3(row_clone) {
             return true;
         };
     }
