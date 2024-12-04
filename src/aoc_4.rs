@@ -22,7 +22,7 @@ fn scan_matrix_for_string(matrix: Vec<Vec<char>>, search_for_string: Vec<char>) 
     let mut sum = 0;
     print!("\nrows: {}, cols: {}\n", matrix.len(), matrix[0].len());
     for row_index in 0..matrix.len() {
-        for col_index in 0..matrix[0].len() -1 {
+        for col_index in 0..matrix[0].len() - 1 {
             if matrix[row_index][col_index] == search_for_string[0] {
                 sum += search_radially(
                     matrix.clone(),
@@ -43,6 +43,7 @@ fn search_radially(
     col_index: usize,
     search_for_string: Vec<char>,
 ) -> i32 {
+    print!("\n\nAÖLKDFLÖKSDJÖFLKSDJFÖLKSDJFSLKÖDJSDF\n\n");
     let mut right = true;
     let mut down = true;
     let mut left = true;
