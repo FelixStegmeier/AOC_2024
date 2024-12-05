@@ -1,4 +1,4 @@
-use std::{i32, mem::swap};
+use std::i32;
 
 pub fn asdf(path: &std::path::Path) {
     let string = std::fs::read_to_string(path).unwrap();
@@ -15,6 +15,17 @@ pub fn asdf(path: &std::path::Path) {
     let mut sum = 0;
     let mut erroneous_updates: Vec<Vec<i32>> = vec![];
 
+    let ruleset_arr: Vec<Vec<i32>> = ruleset
+        .iter()
+        .map(|rule_str| {
+            rule_str
+                .trim()
+                .split('|')
+                .map(|num_str| num_str.parse::<i32>().unwrap())
+                .collect::<Vec<i32>>()
+        })
+        .collect::<Vec<Vec<i32>>>();
+
     let update_arr: Vec<Vec<i32>> = updates
         .iter()
         .map(|update_str| {
@@ -27,22 +38,8 @@ pub fn asdf(path: &std::path::Path) {
         .collect();
 
     'outer: for update in update_arr {
-        for rule in &ruleset {
-            let split_rule = rule.split('|');
-            let collected_num_str: Vec<&str> = split_rule.collect();
-            if !check_rule(
-                collected_num_str[0]
-                    .trim()
-                    .to_string()
-                    .parse::<i32>()
-                    .unwrap(),
-                collected_num_str[1]
-                    .trim()
-                    .to_string()
-                    .parse::<i32>()
-                    .unwrap(),
-                update.clone(),
-            ) {
+        for rule in &ruleset_arr {
+            if !check_rule(rule[0], rule[1], update.clone()) {
                 erroneous_updates.push(update);
                 continue 'outer;
             }
