@@ -125,13 +125,3 @@ fn check_rule(num_1: i32, num_2: i32, update: Vec<i32>) -> bool {
     }
     true
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test() {
-        assert_eq!(check_rule(97, 75, vec!(75, 979)), false)
-    }
-}

@@ -1,5 +1,5 @@
 use std::{process::id, vec};
-
+//wenn ich dem Pfad folge werden manche doppelt betreten => seen arr mit Position oder so
 pub fn aeiou(path: &std::path::Path) {
     let mut map: Vec<Vec<char>> = vec![];
     let map_of_logged_directions: Vec<Vec<usize>>;
