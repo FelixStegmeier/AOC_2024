@@ -11,6 +11,6 @@ mod aoc_7;
 mod aoc_8;
 fn main() {
     aoc_8::dandadan(std::path::Path::new(
-        r"C:\Users\stegm\ProgrammingAndOtherProjects\rust_projects\AOC_2024\input\08\input_08_test",
+        r"C:\Users\stegm\Programming\AOC_2024\input\08\input_08",
     ));
 }

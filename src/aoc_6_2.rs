@@ -11,7 +11,7 @@ pub fn aeiou(path: &std::path::Path) {
     map_of_logged_directions = map.iter().map(|row| vec![100; row.len()]).collect();
 
     let mut starting_pos: Vec<i32> = vec![];
-    let directions: Vec<Vec<i32>> = vec!(vec![-1, 0],vec![0, 1], vec![1, 0], vec![0, -1]);
+    let directions: Vec<Vec<i32>> = vec![vec![-1, 0], vec![0, 1], vec![1, 0], vec![0, -1]];
     let mut dir_index: i32 = 0;
 
     for (row_index, row) in map.clone().iter().enumerate() {
@@ -53,7 +53,9 @@ pub fn aeiou(path: &std::path::Path) {
     let mut guard_current_position = starting_pos.clone();
     loop {
         if match map.get((guard_current_position[0] + directions[dir_index as usize][0]) as usize) {
-            Some(s) => match s.get((guard_current_position[1] + directions[dir_index as usize][1]) as usize) {
+            Some(s) => match s
+                .get((guard_current_position[1] + directions[dir_index as usize][1]) as usize)
+            {
                 Some(character) => character == &'#',
                 None => break,
             },
@@ -63,60 +65,98 @@ pub fn aeiou(path: &std::path::Path) {
             dir_index = (dir_index + 1) % 4;
         }
 
-        if map[(guard_current_position[0] + directions[dir_index as usize][0]) as usize][(guard_current_position[1] + directions[dir_index as usize][1]) as usize]
+        if map[(guard_current_position[0] + directions[dir_index as usize][0]) as usize]
+            [(guard_current_position[1] + directions[dir_index as usize][1]) as usize]
             == 'X'
         {
         } else {
-            map[(guard_current_position[0] + directions[dir_index as usize][0]) as usize][(guard_current_position[1] + directions[dir_index as usize][1]) as usize] =
-                'X';
+            map[(guard_current_position[0] + directions[dir_index as usize][0]) as usize]
+                [(guard_current_position[1] + directions[dir_index as usize][1]) as usize] = 'X';
         }
-        guard_current_position = vec![(guard_current_position[0] + directions[dir_index as usize][0]), (guard_current_position[1] + directions[dir_index as usize][1])];
-        if check_loop_for_position(starting_pos.clone(), directions.clone(), starting_direction_index, map.clone(), guard_current_position[0], guard_current_position[1], map_of_logged_directions.clone()){
+        guard_current_position = vec![
+            (guard_current_position[0] + directions[dir_index as usize][0]),
+            (guard_current_position[1] + directions[dir_index as usize][1]),
+        ];
+        if check_loop_for_position(
+            starting_pos.clone(),
+            directions.clone(),
+            starting_direction_index,
+            map.clone(),
+            guard_current_position[0],
+            guard_current_position[1],
+            map_of_logged_directions.clone(),
+        ) {
             loop_count += 1;
         }
     }
     println!("{}\n\n\n", loop_count);
 }
 
-fn check_loop_for_position(starting_pos: Vec<i32>, directions: Vec<Vec<i32>>, starting_direction_index: i32, map: Vec<Vec<char>>, obstacle_index_row:i32, obstacle_index_col:i32, map_of_logged_directions: Vec<Vec<usize>>) -> bool{
-    if starting_pos[0] == obstacle_index_row && starting_pos[1] == obstacle_index_col{
+fn check_loop_for_position(
+    starting_pos: Vec<i32>,
+    directions: Vec<Vec<i32>>,
+    starting_direction_index: i32,
+    map: Vec<Vec<char>>,
+    obstacle_index_row: i32,
+    obstacle_index_col: i32,
+    map_of_logged_directions: Vec<Vec<usize>>,
+) -> bool {
+    if starting_pos[0] == obstacle_index_row && starting_pos[1] == obstacle_index_col {
         false;
     }
 
     let mut map_with_blockade: Vec<Vec<char>> = map.clone();
     map_with_blockade[obstacle_index_row as usize][obstacle_index_col as usize] = '#';
-    if is_loop(starting_pos.clone(), directions.clone(), starting_direction_index.clone(), map_with_blockade, map_of_logged_directions.clone()){
+    if is_loop(
+        starting_pos.clone(),
+        directions.clone(),
+        starting_direction_index.clone(),
+        map_with_blockade,
+        map_of_logged_directions.clone(),
+    ) {
         return true;
     }
     false
 }
 
-fn is_loop(mut guard_original_pos: Vec<i32>, directions: Vec<Vec<i32>>, mut direction_index: i32, map: Vec<Vec<char>>, mut map_of_logged_directions: Vec<Vec<usize>>) -> bool{
+fn is_loop(
+    mut guard_original_pos: Vec<i32>,
+    directions: Vec<Vec<i32>>,
+    mut direction_index: i32,
+    map: Vec<Vec<char>>,
+    mut map_of_logged_directions: Vec<Vec<usize>>,
+) -> bool {
     loop {
-        if match map.get((guard_original_pos[0] + directions[direction_index as usize][0]) as usize) {
-            Some(s) => match s.get((guard_original_pos[1] + directions[direction_index as usize][1]) as usize) {
+        if match map.get((guard_original_pos[0] + directions[direction_index as usize][0]) as usize)
+        {
+            Some(s) => match s
+                .get((guard_original_pos[1] + directions[direction_index as usize][1]) as usize)
+            {
                 Some(character) => character == &'#',
                 None => break,
             },
             None => break,
         } {
-                direction_index = (direction_index + 1) % 4;
+            direction_index = (direction_index + 1) % 4;
         }
 
-        guard_original_pos = vec![(guard_original_pos[0] + directions[direction_index as usize][0]), (guard_original_pos[1] + directions[direction_index as usize][1])];
+        guard_original_pos = vec![
+            (guard_original_pos[0] + directions[direction_index as usize][0]),
+            (guard_original_pos[1] + directions[direction_index as usize][1]),
+        ];
 
-        if map_of_logged_directions[(guard_original_pos[0]) as usize][(guard_original_pos[1]) as usize]== direction_index as usize
+        if map_of_logged_directions[(guard_original_pos[0]) as usize]
+            [(guard_original_pos[1]) as usize]
+            == direction_index as usize
         {
             return true;
         }
-        
+
         map_of_logged_directions[(guard_original_pos[0]) as usize]
             [(guard_original_pos[1]) as usize] = direction_index as usize;
     }
     false
 }
-
-
 
 mod tests {
     use super::*;
@@ -128,9 +168,15 @@ mod tests {
         for line in test_s.split("\n") {
             map.push(line.trim().chars().collect::<Vec<char>>());
         }
-        let test_thingy: Vec<Vec<usize>> = vec![vec!(100;10); 10];
+        let test_thingy: Vec<Vec<usize>> = vec![vec!(100; 10); 10];
         assert_eq!(
-            is_loop(vec!(6,4), vec!(vec![-1, 0],vec![0, 1], vec![1, 0], vec![0, -1]), 0, map, test_thingy),
+            is_loop(
+                vec!(6, 4),
+                vec!(vec![-1, 0], vec![0, 1], vec![1, 0], vec![0, -1]),
+                0,
+                map,
+                test_thingy
+            ),
             true
         )
     }
@@ -141,9 +187,15 @@ mod tests {
         for line in test_s.split("\n") {
             map.push(line.trim().chars().collect::<Vec<char>>());
         }
-        let test_thingy: Vec<Vec<usize>> = vec![vec!(100;10); 10];
+        let test_thingy: Vec<Vec<usize>> = vec![vec!(100; 10); 10];
         assert_eq!(
-            is_loop(vec!(6,4), vec!(vec![-1, 0],vec![0, 1], vec![1, 0], vec![0, -1]), 0, map, test_thingy),
+            is_loop(
+                vec!(6, 4),
+                vec!(vec![-1, 0], vec![0, 1], vec![1, 0], vec![0, -1]),
+                0,
+                map,
+                test_thingy
+            ),
             false
         )
     }
@@ -154,9 +206,21 @@ mod tests {
         for line in test_s.split("\n") {
             map.push(line.trim().chars().collect::<Vec<char>>());
         }
-        let test_thingy: Vec<Vec<usize>> = vec![vec!(100;10); 10];
-        let map_of_logged_directions: Vec<Vec<usize>>= map.iter().map(|row| vec![100; row.len()]).collect();
+        let test_thingy: Vec<Vec<usize>> = vec![vec!(100; 10); 10];
+        let map_of_logged_directions: Vec<Vec<usize>> =
+            map.iter().map(|row| vec![100; row.len()]).collect();
 
-        assert_eq!(check_loop_for_position(vec!(6,4), vec!(vec![-1, 0],vec![0, 1], vec![1, 0], vec![0, -1]), 0, map.clone(), 0, 0, map_of_logged_directions.clone()), true)
+        assert_eq!(
+            check_loop_for_position(
+                vec!(6, 4),
+                vec!(vec![-1, 0], vec![0, 1], vec![1, 0], vec![0, -1]),
+                0,
+                map.clone(),
+                0,
+                0,
+                map_of_logged_directions.clone()
+            ),
+            true
+        )
     }
 }
